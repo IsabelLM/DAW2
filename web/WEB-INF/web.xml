@@ -33,8 +33,8 @@
         <servlet-class>ServletFormulario1InformacionCliente</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ServletConsulta</servlet-name>
-        <servlet-class>ServletConsulta</servlet-class>
+        <servlet-name>ServletConsultaFormulario</servlet-name>
+        <servlet-class>ServletConsultaFormulario</servlet-class>
         <init-param>
             <param-name>user</param-name>
             <param-value>root</param-value>
@@ -47,6 +47,10 @@
     <servlet>
         <servlet-name>ServletConexion2</servlet-name>
         <servlet-class>ServletConexion2</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletConsultaDatos</servlet-name>
+        <servlet-class>ServletConsultaDatos</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
@@ -73,12 +77,16 @@
         <url-pattern>/ServletFormulario1InformacionCliente</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ServletConsulta</servlet-name>
-        <url-pattern>/ServletConsulta</url-pattern>
+        <servlet-name>ServletConsultaFormulario</servlet-name>
+        <url-pattern>/ServletConsultaFormulario</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServletConexion2</servlet-name>
         <url-pattern>/ServletConexion2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletConsultaDatos</servlet-name>
+        <url-pattern>/ServletConsultaDatos</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

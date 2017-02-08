@@ -23,7 +23,9 @@
         <br>
         <a href="./ServletConsulta">Consulta SQL servlet</a>
         <br>
-        <a href="./FormularioConexion.html">Consulta SQL servlet con formulario</a>
+        <a href="./FormularioConsulta.html">Consulta SQL servlet con formulario</a>
+        <br>
+        <a href="./FormularioConsulta_1.html">Modificacion SQL servlet con formulario</a>
         
     </body>
 </html>
