@@ -38,41 +38,30 @@ public class ServletConsultaDatos extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String consulta = request.getParameter("consulta");
+        String columnaEliminar = request.getParameter("nombreColumnaEliminar");
+        String columnaAnadir = request.getParameter("nombreColumnaAnadir");
 
         String driver = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/tallermecanico";
         Connection con = null;
-        /*String conductor, marca;
-        int importe;*/
+
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, "root", "");
 
             Statement stmt;
             stmt = con.createStatement();
-            int nFilas = stmt.executeUpdate(consulta);
-            out.println("Filas afectadas: " + nFilas + "<br>");
 
-            String sentenciaSQL = "SELECT * FROM information_schema.columns WHERE table_name = 'facturamecanica'";
-            ResultSet rs = stmt.executeQuery(sentenciaSQL);
-            String nombreColumna, tipo, nombreTabla;
-
-            out.println("<table border=\"5\">");
-
-            if (rs.next()) {
-                nombreTabla = rs.getString("TABLE_SCHEMA");
-                out.println("<tr><td colspan=\"2\">" + nombreTabla + "</td></tr>");
+            if (columnaEliminar != null) {
+                int nFilas = stmt.executeUpdate("Alter table facturamecanica drop " + columnaEliminar);
+                out.println("Filas afectadas: " + nFilas + "<br>");
+            } else if (columnaAnadir != null) {
+                String tipo = request.getParameter("tipo");
+                int nFilas = stmt.executeUpdate("Alter table facturamecanica add " + columnaAnadir + " " + tipo);
+                out.println("Filas afectadas: " + nFilas + "<br>");
             }
 
-            out.println("<tr><td><b>Nombre Columna</b></td><td><b>Tipo</b></td></tr>");
-
-            while (rs.next()) {
-                nombreColumna = rs.getString("COLUMN_NAME");
-                tipo = rs.getString("COLUMN_TYPE");
-                out.println("<tr><td>" + nombreColumna + "</td><td>" + tipo + "</td></tr>");
-            }
-            
-            out.println("</table>");
+            crearTablaEstructura(con, stmt, out);
 
         } catch (ClassNotFoundException e) {
             System.out.println("Controlador JDBC no encontrado: " + e.toString());
@@ -90,7 +79,30 @@ public class ServletConsultaDatos extends HttpServlet {
         out.println("<br><a href=\"./\">Inicio</a>");
     }
 
-    
+    public void crearTablaEstructura(Connection con, Statement stmt, PrintWriter out) throws SQLException {
+        String sentenciaSQL = "SELECT * FROM information_schema.columns WHERE table_name = 'facturamecanica'";
+        ResultSet rs = stmt.executeQuery(sentenciaSQL);
+        String nombreColumna, tipo, nombreTabla, pk;
+
+        out.println("<table border=\"5\">");
+
+        if (rs.next()) {
+            nombreTabla = rs.getString("TABLE_SCHEMA");
+            out.println("<tr><td colspan=\"2\">" + nombreTabla + "</td></tr>");
+        }
+
+        out.println("<tr><td><b>Nombre Columna</b></td><td><b>Tipo</b></td><td><b>Primary Key</b></td></tr>");
+
+        while (rs.next()) {
+            nombreColumna = rs.getString("COLUMN_NAME");
+            tipo = rs.getString("COLUMN_TYPE");
+            pk = rs.getString("COLUMN_KEY");
+            out.println("<tr><td>" + nombreColumna + "</td><td>" + tipo + "</td><td>" + pk + "</td></tr>");
+        }
+
+        out.println("</table>");
+    }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

@@ -9,26 +9,40 @@ and open the template in the editor.
         <title>Consulta</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script>
+            function expandir_formulario() {
+                var seleccion = document.getElementsByName("opciones")[0].value;
+                if (seleccion == "Anadir columna") {
+                    document.getElementById("extra").innerHTML = "<br>Nombre columna: <input type=\"text\" name=\"nombreColumnaAnadir\">";
+                    document.getElementById("extra").innerHTML += "<br>Tipo: <input type=\"text\" name=\"tipo\">";
+                } else if (seleccion == "Eliminar columna") {
+                    document.getElementById("extra").innerHTML = "<br>Nombre columna: <input type=\"text\" name=\"nombreColumnaEliminar\">";
+                } else if (seleccion == "Editar columna") {
+
+                }
+            }
+
+        </script>
+
     </head>
     <body>        
-        <form action="./ServletConsultaDatos" method="post">
+        <form id="formulario" name="formu" action="./ServletConsultaDatos" method="post">
 
             <table>
                 <tr>
                     <td>Introduce tu consulta:</td>
                     <td> <textarea name="consulta"></textarea></td>
-
                 </tr>
             </table> <br>
 
-            <!-- 
-            <select name="opciones">
-                 <option value="Anadir columna"></option>
-                 <option value="Eliminar columna"></option>
-                 <option value="Eliminar columna"></option>
-            
-              </select>
-            -->
+            <select name="opciones" onchange="expandir_formulario()">
+                <option id="añadir"  value="Anadir columna">Añadir columna</option>
+                <option id="eliminar" value="Eliminar columna">Eliminar columna</option>
+                <option id="editar"  value="Editar columna">Editar columna</option>
+                <option value="estructura">Estructura</option>
+            </select><br>
+            <div id="extra"></div><br>
             <input type="submit" value="Enviar">
             <input type="reset" value="Borrar"><p>
         </form>
