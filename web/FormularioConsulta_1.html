@@ -13,28 +13,34 @@ and open the template in the editor.
         <script>
             function expandir_formulario() {
                 var seleccion = document.getElementsByName("opciones")[0].value;
+
                 if (seleccion == "Anadir columna") {
                     document.getElementById("extra").innerHTML = "<br>Nombre columna: <input type=\"text\" name=\"nombreColumnaAnadir\">";
                     document.getElementById("extra").innerHTML += "<br>Tipo: <input type=\"text\" name=\"tipo\">";
                 } else if (seleccion == "Eliminar columna") {
                     document.getElementById("extra").innerHTML = "<br>Nombre columna: <input type=\"text\" name=\"nombreColumnaEliminar\">";
                 } else if (seleccion == "Editar columna") {
-
+                    document.getElementById("extra").innerHTML = "<br>Nombre columna: <input type=\"text\" name=\"nombreColumnaEliminar\">";
                 }
             }
 
+            function expandir_formulario2() {
+                var seleccion2 = document.getElementsByName("opciones2")[0].value;
+                
+                if (seleccion2 == "InsertarValores") {
+                    document.getElementById("extra2").innerHTML = "<br>Nombre: <input type=\"text\" name=\"nombre\">";
+                    document.getElementById("extra2").innerHTML += "<br>Marca: <input type=\"text\" name=\"marca\">";
+                    document.getElementById("extra2").innerHTML += "<br>Importe: <input type=\"text\" name=\"importe\">";
+                }else if(seleccion2 == "EliminarRegistro"){
+                    
+                }
+            }
         </script>
 
     </head>
-    <body>        
-        <form id="formulario" name="formu" action="./ServletConsultaDatos" method="post">
-
-            <table>
-                <tr>
-                    <td>Introduce tu consulta:</td>
-                    <td> <textarea name="consulta"></textarea></td>
-                </tr>
-            </table> <br>
+    <body>     
+        <h3>Modificar estructura tabla</h3>
+        <form id="formulario" name="formu" action="./ServletConsultaDatos" method="post">         
 
             <select name="opciones" onchange="expandir_formulario()">
                 <option id="añadir"  value="Anadir columna">Añadir columna</option>
@@ -43,6 +49,20 @@ and open the template in the editor.
                 <option value="estructura">Estructura</option>
             </select><br>
             <div id="extra"></div><br>
+            <input type="submit" value="Enviar">
+            <input type="reset" value="Borrar"><p>
+        </form>
+
+        <h3>Modificar datos tabla</h3>
+        <form id="formulario2" name="formu2" action="./ServletConsultaDatos" method="post">
+            
+            <select name="opciones2" onchange="expandir_formulario2()">
+                <option id="insertarValores"  value="InsertarValores">Insertar valores</option>
+                <option id="eliminarRegistro" value="EliminarRegistro">Eliminar registro</option>
+                <option id="editar"  value="Editar columna">Editar columna</option>
+                
+            </select><br>
+            <div id="extra2"></div><br>
             <input type="submit" value="Enviar">
             <input type="reset" value="Borrar"><p>
         </form>

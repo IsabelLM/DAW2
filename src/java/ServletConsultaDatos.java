@@ -84,13 +84,15 @@ public class ServletConsultaDatos extends HttpServlet {
         ResultSet rs = stmt.executeQuery(sentenciaSQL);
         String nombreColumna, tipo, nombreTabla, pk;
 
-        out.println("<table border=\"5\">");
+        out.println("<table style=\"text-align:center;\" border=\"5\">");
 
         if (rs.next()) {
             nombreTabla = rs.getString("TABLE_SCHEMA");
-            out.println("<tr><td colspan=\"2\">" + nombreTabla + "</td></tr>");
+            out.println("<tr><td colspan=\"3\">" + "<b>Nombre Tabla</b>" + "</td></tr>");
+            out.println("<tr><td colspan=\"3\">" + nombreTabla + "</td></tr>");
         }
-
+        
+        rs = stmt.executeQuery(sentenciaSQL);
         out.println("<tr><td><b>Nombre Columna</b></td><td><b>Tipo</b></td><td><b>Primary Key</b></td></tr>");
 
         while (rs.next()) {
