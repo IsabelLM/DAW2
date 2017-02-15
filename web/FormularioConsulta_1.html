@@ -21,6 +21,9 @@ and open the template in the editor.
                     document.getElementById("extra").innerHTML = "<br>Nombre columna: <input type=\"text\" name=\"nombreColumnaEliminar\">";
                 } else if (seleccion == "Editar columna") {
                     document.getElementById("extra").innerHTML = "<br>Nombre columna: <input type=\"text\" name=\"nombreColumnaEliminar\">";
+                } else if(seleccion == "consultar"){
+                    document.getElementById("extra").innerHTML = "<br>Nombre base de datos: <input type=\"text\" name=\"nombreBaseDatos\">";
+                    
                 }
             }
 
@@ -46,6 +49,7 @@ and open the template in the editor.
                 <option id="añadir"  value="Anadir columna">Añadir columna</option>
                 <option id="eliminar" value="Eliminar columna">Eliminar columna</option>
                 <option id="editar"  value="Editar columna">Editar columna</option>
+                <option id="consultar"  value="consultar">Estrucutra tablas</option>
                 <option value="estructura">Estructura</option>
             </select><br>
             <div id="extra"></div><br>

@@ -40,6 +40,7 @@ public class ServletConsultaDatos extends HttpServlet {
         String consulta = request.getParameter("consulta");
         String columnaEliminar = request.getParameter("nombreColumnaEliminar");
         String columnaAnadir = request.getParameter("nombreColumnaAnadir");
+        String baseDatos = request.getParameter("nombreBaseDatos");
 
         String driver = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/tallermecanico";
@@ -48,7 +49,6 @@ public class ServletConsultaDatos extends HttpServlet {
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, "root", "");
-
             Statement stmt;
             stmt = con.createStatement();
 
@@ -59,10 +59,12 @@ public class ServletConsultaDatos extends HttpServlet {
                 String tipo = request.getParameter("tipo");
                 int nFilas = stmt.executeUpdate("Alter table facturamecanica add " + columnaAnadir + " " + tipo);
                 out.println("Filas afectadas: " + nFilas + "<br>");
+            } else if (baseDatos != null) {
+                consultaTablas(con, stmt, out, baseDatos);
             }
 
-            crearTablaEstructura(con, stmt, out);
-
+            // crearTablaEstructura(con, stmt, out);
+            
         } catch (ClassNotFoundException e) {
             System.out.println("Controlador JDBC no encontrado: " + e.toString());
         } catch (SQLException e) {
@@ -91,9 +93,42 @@ public class ServletConsultaDatos extends HttpServlet {
             out.println("<tr><td colspan=\"3\">" + "<b>Nombre Tabla</b>" + "</td></tr>");
             out.println("<tr><td colspan=\"3\">" + nombreTabla + "</td></tr>");
         }
-        
+
         rs = stmt.executeQuery(sentenciaSQL);
         out.println("<tr><td><b>Nombre Columna</b></td><td><b>Tipo</b></td><td><b>Primary Key</b></td></tr>");
+
+        while (rs.next()) {
+            nombreColumna = rs.getString("COLUMN_NAME");
+            tipo = rs.getString("COLUMN_TYPE");
+            pk = rs.getString("COLUMN_KEY");
+            out.println("<tr><td>" + nombreColumna + "</td><td>" + tipo + "</td><td>" + pk + "</td></tr>");
+        }
+
+        out.println("</table>");
+    }
+
+    public void consultaTablas(Connection con, Statement stmt, PrintWriter out, String nombreBase) throws SQLException {
+        String sentenciaSQL = "SELECT * FROM information_schema.tables WHERE table_schema = '" + nombreBase + "'";
+        ResultSet rs = stmt.executeQuery(sentenciaSQL);
+        String nombreTabla;
+        rs.next();
+        do {
+            nombreTabla = rs.getString("TABLE_NAME");
+            crearTablaEstructura2(con, stmt, out, nombreTabla);
+        } while (rs.next());
+    }
+
+    public void crearTablaEstructura2(Connection con, Statement stmt, PrintWriter out, String nombreTabla) throws SQLException {
+        String sentenciaSQL = "SELECT * FROM information_schema.columns WHERE table_name = '" + nombreTabla + "'";
+        ResultSet rs = stmt.executeQuery(sentenciaSQL);
+        String nombreColumna, tipo, pk;
+
+        out.println("<table style=\"text-align:center;\" border=\"5\">");
+        out.println("<tr><td colspan=\"3\">" + "<b>Nombre Tabla</b>" + "</td></tr>");
+        out.println("<tr><td colspan=\"3\">" + nombreTabla + "</td></tr>");
+        out.println("<tr><td><b>Nombre Columna</b></td><td><b>Tipo</b></td><td><b>Primary Key</b></td></tr>");
+
+        rs = stmt.executeQuery(sentenciaSQL);
 
         while (rs.next()) {
             nombreColumna = rs.getString("COLUMN_NAME");
