@@ -52,6 +52,10 @@
         <servlet-name>ServletConsultaDatos</servlet-name>
         <servlet-class>ServletConsultaDatos</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MostrarBD</servlet-name>
+        <servlet-class>MostrarBD</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
         <url-pattern>/NewServlet</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>ServletConsultaDatos</servlet-name>
         <url-pattern>/ServletConsultaDatos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MostrarBD</servlet-name>
+        <url-pattern>/MostrarBD</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

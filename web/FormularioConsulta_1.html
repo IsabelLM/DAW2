@@ -20,22 +20,32 @@ and open the template in the editor.
                 } else if (seleccion == "Eliminar columna") {
                     document.getElementById("extra").innerHTML = "<br>Nombre columna: <input type=\"text\" name=\"nombreColumnaEliminar\">";
                 } else if (seleccion == "Editar columna") {
-                    document.getElementById("extra").innerHTML = "<br>Nombre columna: <input type=\"text\" name=\"nombreColumnaEliminar\">";
-                } else if(seleccion == "consultar"){
-                    document.getElementById("extra").innerHTML = "<br>Nombre base de datos: <input type=\"text\" name=\"nombreBaseDatos\">";
-                    
-                }
+                    document.getElementById("extra").innerHTML = "<br>Nombre columna original: <input type=\"text\" name=\"nombreColumnaEditarO\">";
+                    document.getElementById("extra").innerHTML += "<br>Nuevo nombre: <input type=\"text\" name=\"nombreColumnaEditarN\">";
+                } 
             }
 
             function expandir_formulario2() {
                 var seleccion2 = document.getElementsByName("opciones2")[0].value;
                 
-                if (seleccion2 == "InsertarValores") {
+                if (seleccion2 == "InsertarRegistro") {
                     document.getElementById("extra2").innerHTML = "<br>Nombre: <input type=\"text\" name=\"nombre\">";
                     document.getElementById("extra2").innerHTML += "<br>Marca: <input type=\"text\" name=\"marca\">";
                     document.getElementById("extra2").innerHTML += "<br>Importe: <input type=\"text\" name=\"importe\">";
                 }else if(seleccion2 == "EliminarRegistro"){
                     
+                }
+            }
+            
+            function expandir_formulario3() {
+                var seleccion = document.getElementsByName("opciones3")[0].value;
+
+                 if(seleccion == "consultar"){
+                    document.getElementById("extra3").innerHTML = "<br>Nombre base de datos: <input type=\"text\" name=\"nombreBaseDatos\">";                    
+                }if(seleccion == "estructura"){
+                    document.getElementById("extra3").innerHTML = "<br>Nombre tabla: <input type=\"text\" name=\"nombreTabla\">";                    
+                }if(seleccion == "mostrarRegistros"){
+                    document.getElementById("extra3").innerHTML = "<br>Nombre tabla: <input type=\"text\" name=\"nombreTablaRegistros\">";                    
                 }
             }
         </script>
@@ -46,11 +56,10 @@ and open the template in the editor.
         <form id="formulario" name="formu" action="./ServletConsultaDatos" method="post">         
 
             <select name="opciones" onchange="expandir_formulario()">
+                <option>Elige</option>
                 <option id="añadir"  value="Anadir columna">Añadir columna</option>
                 <option id="eliminar" value="Eliminar columna">Eliminar columna</option>
-                <option id="editar"  value="Editar columna">Editar columna</option>
-                <option id="consultar"  value="consultar">Estrucutra tablas</option>
-                <option value="estructura">Estructura</option>
+                <option id="editar"  value="Editar columna">Editar columna</option>                
             </select><br>
             <div id="extra"></div><br>
             <input type="submit" value="Enviar">
@@ -61,7 +70,8 @@ and open the template in the editor.
         <form id="formulario2" name="formu2" action="./ServletConsultaDatos" method="post">
             
             <select name="opciones2" onchange="expandir_formulario2()">
-                <option id="insertarValores"  value="InsertarValores">Insertar valores</option>
+                <option>Elige</option>
+                <option id="insertarRegistro"  value="InsertarRegistro">Insertar registro</option>
                 <option id="eliminarRegistro" value="EliminarRegistro">Eliminar registro</option>
                 <option id="editar"  value="Editar columna">Editar columna</option>
                 
@@ -71,6 +81,20 @@ and open the template in the editor.
             <input type="reset" value="Borrar"><p>
         </form>
 
+        <h3>Consultar estructura</h3>
+        <form id="formulario" name="formu" action="./ServletConsultaDatos" method="post">         
+
+            <select name="opciones3" onchange="expandir_formulario3()">
+                <option>Elige</option>
+                <option id="consultar"  value="consultar">Estrucutra tablas</option>
+                <option id="estructura" value="estructura">Estructura</option>
+                <option id="estructura" value="mostrarRegistros">mostrarRegistros</option>
+            </select><br>
+            <div id="extra3"></div><br>
+            <input type="submit" value="Enviar">
+            <input type="reset" value="Borrar"><p>
+        </form>
         <a href="./">Inicio</a>
+        
     </body>
 </html>
