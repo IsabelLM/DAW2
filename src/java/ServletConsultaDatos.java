@@ -214,7 +214,6 @@ public class ServletConsultaDatos extends HttpServlet {
             importe = rs.getString(4);
             out.println("<tr><td>" + id + "</td><td>" + nombre + "</td><td>" + marca + "</td><td>" + importe + "</td></tr>");
         }*/
-        
         //bucle para sacar las columnas dinamicamente
         while (rs.next()) {
             contador++;
@@ -222,12 +221,15 @@ public class ServletConsultaDatos extends HttpServlet {
         rs.beforeFirst();
         out.println("<tr>");
         for (int i = 1; rs.next(); i++) {
-            String parametro;
-            parametro = rs.getString(i);
-            out.println("<td>" + parametro + "</td>");
-            if (i == contador) {
-                out.println("</tr>");
+            for (int j = 1; j <= contador; j++) {
+                String parametro;
+                parametro = rs.getString(j);
+                out.println("<td>" + parametro + "</td>");
+                if (j == contador) {
+                    out.println("</tr>");
+                }
             }
+
         }
 
         out.println("</table>");
