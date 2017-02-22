@@ -9,7 +9,6 @@ and open the template in the editor.
         <title>Consulta</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
         <script>
             function expandir_formulario() {
                 var seleccion = document.getElementsByName("opciones")[0].value;
@@ -22,32 +21,36 @@ and open the template in the editor.
                 } else if (seleccion == "Editar columna") {
                     document.getElementById("extra").innerHTML = "<br>Nombre columna original: <input type=\"text\" name=\"nombreColumnaEditarO\">";
                     document.getElementById("extra").innerHTML += "<br>Nuevo nombre: <input type=\"text\" name=\"nombreColumnaEditarN\">";
-                } 
+                }
             }
 
             function expandir_formulario2() {
                 var seleccion2 = document.getElementsByName("opciones2")[0].value;
-                
+
                 if (seleccion2 == "InsertarRegistro") {
                     document.getElementById("extra2").innerHTML = "<br>Nombre: <input type=\"text\" name=\"nombre\">";
                     document.getElementById("extra2").innerHTML += "<br>Marca: <input type=\"text\" name=\"marca\">";
                     document.getElementById("extra2").innerHTML += "<br>Importe: <input type=\"text\" name=\"importe\">";
-                }else if(seleccion2 == "EliminarRegistro"){
-                    
+                } else if (seleccion2 == "EliminarRegistro") {
+
                 }
             }
-            
+
             function expandir_formulario3() {
                 var seleccion = document.getElementsByName("opciones3")[0].value;
 
-                 if(seleccion == "consultar"){
-                    document.getElementById("extra3").innerHTML = "<br>Nombre base de datos: <input type=\"text\" name=\"nombreBaseDatos\">";                    
-                }if(seleccion == "estructura"){
-                    document.getElementById("extra3").innerHTML = "<br>Nombre tabla: <input type=\"text\" name=\"nombreTabla\">";                    
-                }if(seleccion == "mostrarRegistros"){
-                    document.getElementById("extra3").innerHTML = "<br>Nombre tabla: <input type=\"text\" name=\"nombreTablaRegistros\">";                    
+                if (seleccion == "consultar") {
+                    document.getElementById("extra3").innerHTML = "<br>Nombre base de datos: <input type=\"text\" name=\"nombreBaseDatos\">";
+                }
+                if (seleccion == "estructura") {
+                    document.getElementById("extra3").innerHTML = "<br>Nombre tabla: <input type=\"text\" name=\"nombreTabla\">";
+                }
+                if (seleccion == "mostrarRegistros") {
+                    document.getElementById("extra3").innerHTML = "<br>Nombre tabla: <input type=\"text\" name=\"nombreTablaRegistros\">";
                 }
             }
+            
+            
         </script>
 
     </head>
@@ -68,13 +71,13 @@ and open the template in the editor.
 
         <h3>Modificar datos tabla</h3>
         <form id="formulario2" name="formu2" action="./ServletConsultaDatos" method="post">
-            
+
             <select name="opciones2" onchange="expandir_formulario2()">
                 <option>Elige</option>
                 <option id="insertarRegistro"  value="InsertarRegistro">Insertar registro</option>
                 <option id="eliminarRegistro" value="EliminarRegistro">Eliminar registro</option>
                 <option id="editar"  value="Editar columna">Editar columna</option>
-                
+
             </select><br>
             <div id="extra2"></div><br>
             <input type="submit" value="Enviar">
@@ -95,6 +98,14 @@ and open the template in the editor.
             <input type="reset" value="Borrar"><p>
         </form>
         <a href="./">Inicio</a>
+
+        <h3>Insertar/Borrar registros</h3>
+        <form action="./ServletConsultaInsertar" method="post">
+            <input type="submit" value="Insertar">            
+        </form>
+          <form action="./ServletConsultaDatos" method="post">
+            <input type="submit" value="Eliminar">            
+        </form>
         
     </body>
 </html>

@@ -56,6 +56,10 @@
         <servlet-name>MostrarBD</servlet-name>
         <servlet-class>MostrarBD</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServletConsultaInsertar</servlet-name>
+        <servlet-class>ServletConsultaInsertar</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
         <url-pattern>/NewServlet</url-pattern>
@@ -95,6 +99,10 @@
     <servlet-mapping>
         <servlet-name>MostrarBD</servlet-name>
         <url-pattern>/MostrarBD</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletConsultaInsertar</servlet-name>
+        <url-pattern>/ServletConsultaInsertar</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
