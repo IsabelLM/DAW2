@@ -53,12 +53,32 @@
         <servlet-class>ServletConsultaDatos</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>MostrarBD</servlet-name>
-        <servlet-class>MostrarBD</servlet-class>
+        <servlet-name>ServletConsultaTablaInsertar</servlet-name>
+        <servlet-class>ServletConsultaTablaInsertar</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ServletConsultaInsertar</servlet-name>
-        <servlet-class>ServletConsultaInsertar</servlet-class>
+        <servlet-name>ServletConsultaTablaEditar</servlet-name>
+        <servlet-class>ServletConsultaTablaEditar</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletConsultaTablaModificar</servlet-name>
+        <servlet-class>ServletConsultaTablaModificar</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletConsultaTablaModificar1</servlet-name>
+        <servlet-class>ServletConsultaTablaModificar1</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletConsultaTablaEliminar</servlet-name>
+        <servlet-class>ServletConsultaTablaEliminar</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletConsultaTablaInsertar1</servlet-name>
+        <servlet-class>ServletConsultaTablaInsertar1</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletConsultaExportar</servlet-name>
+        <servlet-class>ServletConsultaExportar</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
@@ -97,12 +117,32 @@
         <url-pattern>/ServletConsultaDatos</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>MostrarBD</servlet-name>
-        <url-pattern>/MostrarBD</url-pattern>
+        <servlet-name>ServletConsultaTablaInsertar</servlet-name>
+        <url-pattern>/ServletConsultaTablaInsertar</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ServletConsultaInsertar</servlet-name>
-        <url-pattern>/ServletConsultaInsertar</url-pattern>
+        <servlet-name>ServletConsultaTablaEditar</servlet-name>
+        <url-pattern>/ServletConsultaTablaEditar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletConsultaTablaModificar</servlet-name>
+        <url-pattern>/ServletConsultaTablaModificar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletConsultaTablaModificar1</servlet-name>
+        <url-pattern>/ServletConsultaTablaModificar1</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletConsultaTablaEliminar</servlet-name>
+        <url-pattern>/ServletConsultaTablaEliminar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletConsultaTablaInsertar1</servlet-name>
+        <url-pattern>/ServletConsultaTablaInsertar1</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletConsultaExportar</servlet-name>
+        <url-pattern>/ServletConsultaExportar</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

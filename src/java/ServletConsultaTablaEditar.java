@@ -10,10 +10,10 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Vespertino
+ * @author Isabel
  */
-public class MostrarBD extends HttpServlet {
+public class ServletConsultaTablaEditar extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,64 +34,60 @@ public class MostrarBD extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
     static DatabaseMetaData metadatos;
-    static ResultSetMetaData resultDatos;
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String driver = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://127.0.0.1:3306/micms";
+        String url = "jdbc:mysql://127.0.0.1:3306/tallermecanico";
         Connection con = null;
-
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, "root", "");
             Statement stmt = con.createStatement();
             metadatos = con.getMetaData();
-            //String colText="";
-            String aux=null;
-            
-            ResultSet tablas=metadatos.getTables(null, null, null, null);
-            ArrayList aTablas= new ArrayList();
-            int countt=0;
-            while (tablas.next()) {               
-                aTablas.add(tablas.getObject(3).toString());
+            ResultSet rs = stmt.executeQuery("SELECT * FROM facturamecanica");
+            String id;
+
+            out.println("<table style=\"text-align:center;\" border=\"0\">");
+            for (int x = 1; x <= rs.getMetaData().getColumnCount(); x++) {
+                out.println("<td><b>" + rs.getMetaData().getColumnName(x) + "</b></td>");
             }
-            tablas.close();            
-            
-            out.println("<body>");
-            out.println("<h3>Tablas de Tallermecanico</h3>");
-            for (int i = 0; i < aTablas.size(); i++) {
-                aux=aTablas.get(i).toString();
-                out.println("<table style=\"text-align:center;\" border=\"5\">");
-                out.println("<th colspan='20' >" + aux + "</th>");
-                out.println("<tr>");
-                
-                ResultSet cols= metadatos.getColumns(null, null, aux, null);
-                while(cols.next()){
-                    out.println("<td>" + cols.getString(4) + "</td>");
-                }       
-                cols.close();
+            out.println("</tr><tr>");
+            while (rs.next()) {
+                id = rs.getString(1);
+                for (int x = 1; x <= rs.getMetaData().getColumnCount(); x++) {
+                    out.println("<td>" + rs.getString(x) + "</td>");
+                }
+                out.println("<td><form action='ServletConsultaTablaModificar' method='post'>");
+                out.println("<input type='hidden' value='" + id + "' name='id'>");
+                out.println("<input type='hidden' value='facturamecanica' name='eleccion'>");
+                out.println("<input type='submit' value='Editar' name='editar'/></form></td>");
+                out.println("<td><form action='ServletConsultaTablaEliminar' method='post'>");
+                out.println("<input type='hidden' value='" + id + "' name='id'>");
+                out.println("<input type='hidden' value='facturamecanica' name='eleccion'>");
+                out.println("<input type='submit' value='eliminar' name='eliminar'/></form></td>");
                 out.println("</tr>");
-                out.println("</table>");
-                out.println("<br>");
             }
-            out.println("</body>");
-        } catch (ClassNotFoundException e) {
-            out.println("Controlador JDBC no encontrado: " + e.toString());
-        } catch (SQLException e) {
-            out.println("Excepcion capturada de SQL: " + e.toString());
+            out.println("</table><br>");
+            out.println("<form action='ServletConsultaTablaInsertar' method='post'>");
+            out.println("<input type='hidden' value='facturamecanica' name='eleccion'>");
+            out.println("<input type='submit' value='Insertar nueva fila' name='insertar'/></form>");
+            out.println("<br><a href=\"./FormularioConsulta_1.html\">Volver</a>");
+            out.println("<br><a href=\"./\">Inicio</a>");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ServletConsultaTablaEditar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ServletConsultaTablaEditar.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                out.println("No se puede cerrar la conexion: " + e.toString());
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ServletConsultaTablaEditar.class.getName()).log(Level.SEVERE, null, ex);
             }
+            out.close();
         }
     }
 

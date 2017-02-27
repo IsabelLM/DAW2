@@ -9,11 +9,12 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Vespertino
+ * @author Isabel
  */
-public class ServletConsultaInsertar extends HttpServlet {
+public class ServletConsultaTablaModificar extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,78 +35,50 @@ public class ServletConsultaInsertar extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    static DatabaseMetaData metadatos;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
         String driver = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/tallermecanico";
+        String url = "jdbc:mysql://127.0.0.1:3306/tallermecanico";
         Connection con = null;
-
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, "root", "");
-            Statement stmt;
-            stmt = con.createStatement();
-            insertarRegistro(con, stmt, out, request);
-        } catch (ClassNotFoundException e) {
-            System.out.println("Controlador JDBC no encontrado: " + e.toString());
-        } catch (SQLException e) {
-            System.out.println("Excepcion capturada de SQL: " + e.toString());
+            Statement stmt = con.createStatement();
+            metadatos = con.getMetaData();
+            String id = request.getParameter("id");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM facturamecanica WHERE Id=" + id);
+
+            out.println("<form action='ServletConsultaTablaModificar1' method='post'>");
+            out.println("<table style=\"text-align:center;\" border=\"0\"><tr>");
+            for (int i = 2; i <= rs.getMetaData().getColumnCount(); i++) {
+                out.println("<td><b>" + rs.getMetaData().getColumnName(i) + "<b></td>");
+            }
+            out.println("</tr><tr>");
+            while (rs.next()) {
+                for (int i = 2; i <= rs.getMetaData().getColumnCount(); i++) {
+                    out.println("<td><input type='text' name='" + rs.getMetaData().getColumnName(i) + "' value='" + rs.getString(i) + "'/></th>");
+                }
+            }
+            out.println("</tr></table><input type='hidden' name='id' value='" + id + "'/>");
+            out.println("<input type='hidden' value='facturamecanica' name='tabla'>");
+            out.println("<input type='submit' value='Actualizar' name='actualizar'/>");
+            out.println("</form>");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ServletConsultaTablaModificar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ServletConsultaTablaModificar.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("No se puede cerrar la conexion: " + e.toString());
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ServletConsultaTablaModificar.class.getName()).log(Level.SEVERE, null, ex);
             }
+            out.close();
         }
-        out.println("<br><a href=\"./\">Inicio</a>");
-        out.println("<br><a href=\"./FormularioConsulta_1.html\">Volver</a>");
-
-    }
-
-    public void insertarRegistro(Connection con, Statement stmt, PrintWriter out, HttpServletRequest request) throws SQLException {
-        int cont = 0;
-        String arrayCampos[];
-        String sentenciaSQL2 = "SELECT * FROM information_schema.columns WHERE table_name = 'facturamecanica'";
-        ResultSet rs = stmt.executeQuery(sentenciaSQL2);
-
-        //Bucle para sacar el nombre de las columnas que hay actualmente en la tabla
-        out.println("<form>");
-        out.println("<table style=\"text-align:center;\" border=\"5\">");
-        rs.first();
-
-        while (rs.next()) {
-            cont++;
-        }
-        
-        arrayCampos = new String[cont];
-
-        rs.first();
-
-        while (rs.next()) {
-            int i = 0;
-            String nombreColumna = rs.getString("COLUMN_NAME");
-            out.print("<tr><td><b>" + nombreColumna + "</b></td></tr>");
-            out.println("<td><input type=\"text\" name=\"campo" + cont + "\"><br></td>");
-            arrayCampos[i] = nombreColumna;
-            i++;
-        }
-
-        out.println("<input type=\"submit\">");
-        out.println("</table>");
-        out.println("</form>");
-
-        //("INSERT INTO `facturamecanica`  VALUES (NULL, '" + nombre + "', '" + marca + "', '" + importe + "')");
-        for (int i = 0; i < cont; i++) {
-            String nombreCampo[] = new String[cont];
-            nombreCampo[i] = request.getParameter("campo" + cont);
-        }
-                   
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

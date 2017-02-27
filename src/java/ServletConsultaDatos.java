@@ -43,9 +43,6 @@ public class ServletConsultaDatos extends HttpServlet {
         String columnaEliminar = request.getParameter("nombreColumnaEliminar");
         String columnaAnadir = request.getParameter("nombreColumnaAnadir");
 
-        String columnaEditarO = request.getParameter("nombreColumnaEditarO");
-        String columnaEditarN = request.getParameter("nombreColumnaEditarN");
-
         String baseDatos = request.getParameter("nombreBaseDatos");
         String nombreTabla = request.getParameter("nombreTabla");
         String mostrarRegistrosTabla = request.getParameter("nombreTablaRegistros");
@@ -64,15 +61,18 @@ public class ServletConsultaDatos extends HttpServlet {
             Statement stmt;
             stmt = con.createStatement();
 
+            //Ifs para saber qué opción ha escogido el usuario
             if (columnaEliminar != null) {
-                int nFilas = stmt.executeUpdate("Alter table facturamecanica drop " + columnaEliminar);
+                String tabla = request.getParameter("nombreTablaEliminar");
+                int nFilas = stmt.executeUpdate("Alter table " + tabla + " drop " + columnaEliminar);
                 out.println("Filas afectadas: " + nFilas + "<br>");
-                crearTablaEstructuraNombre(con, stmt, out, "facturamecanica");
+                crearTablaEstructuraNombre(con, stmt, out, tabla);
             } else if (columnaAnadir != null) {
                 String tipo = request.getParameter("tipo");
-                int nFilas = stmt.executeUpdate("Alter table facturamecanica add " + columnaAnadir + " " + tipo);
+                String tabla = request.getParameter("nombreTablaAnadir");
+                int nFilas = stmt.executeUpdate("Alter table " + tabla + " add " + columnaAnadir + " " + tipo);
                 out.println("Filas afectadas: " + nFilas + "<br>");
-                crearTablaEstructuraNombre(con, stmt, out, "facturamecanica");
+                crearTablaEstructuraNombre(con, stmt, out, tabla);
             } else if (baseDatos != null) {
                 mostrarBD(con, stmt, out, baseDatos);
             } else if (nombreTabla != null) {
@@ -104,32 +104,6 @@ public class ServletConsultaDatos extends HttpServlet {
 
     }
 
-//    public void crearTablaEstructura(Connection con, Statement stmt, PrintWriter out) throws SQLException {
-//        String sentenciaSQL = "SELECT * FROM information_schema.columns WHERE table_name = 'facturamecanica'";
-//        ResultSet rs = stmt.executeQuery(sentenciaSQL);
-//        String nombreColumna, tipo, nombreTabla, pk;
-//
-//        out.println("<table style=\"text-align:center;\" border=\"5\">");
-//
-//        if (rs.next()) {
-//            nombreTabla = rs.getString("TABLE_SCHEMA");
-//            out.println("<tr><td colspan=\"3\">" + "<b>Nombre Tabla</b>" + "</td></tr>");
-//            out.println("<tr><td colspan=\"3\">" + nombreTabla + "</td></tr>");
-//        }
-//
-//        rs = stmt.executeQuery(sentenciaSQL);
-//        out.println("<tr><td><b>Nombre Columna</b></td><td><b>Tipo</b></td><td><b>Primary Key</b></td></tr>");
-//
-//        while (rs.next()) {
-//            nombreColumna = rs.getString("COLUMN_NAME");
-//            tipo = rs.getString("COLUMN_TYPE");
-//            pk = rs.getString("COLUMN_KEY");
-//            out.println("<tr><td>" + nombreColumna + "</td><td>" + tipo + "</td><td>" + pk + "</td></tr>");
-//        }
-//
-//        out.println("</table>");
-//    }
-
     public void crearTablaEstructuraNombre(Connection con, Statement stmt, PrintWriter out, String nombreTabla) throws SQLException {
         String sentenciaSQL = "SELECT * FROM information_schema.columns WHERE table_name = '" + nombreTabla + "'";
         ResultSet rs = stmt.executeQuery(sentenciaSQL);
@@ -138,9 +112,14 @@ public class ServletConsultaDatos extends HttpServlet {
         out.println("<table style=\"text-align:center;\" border=\"5\">");
 
         if (rs.next()) {
-            nombreTabla = rs.getString("TABLE_SCHEMA");
-            out.println("<tr><td colspan=\"3\">" + "<b>Nombre</b>" + "</td></tr>");
+            String nombreBase;
+            nombreBase = rs.getString("TABLE_SCHEMA");
+            out.println("<tr><td colspan=\"3\">" + "<b>Nombre Base de Datos</b>" + "</td></tr>");
+            out.println("<tr><td colspan=\"3\">" + nombreBase + "</td></tr>");
+            nombreTabla = rs.getString("TABLE_NAME");
+            out.println("<tr><td colspan=\"3\">" + "<b>Nombre de tabla</b>" + "</td></tr>");
             out.println("<tr><td colspan=\"3\">" + nombreTabla + "</td></tr>");
+
         }
 
         rs = stmt.executeQuery(sentenciaSQL);
@@ -156,29 +135,29 @@ public class ServletConsultaDatos extends HttpServlet {
         out.println("</table>");
     }
 
-    public void mostrarBD(Connection con, Statement stmt, PrintWriter out, String base) throws SQLException, ClassNotFoundException {
+    public void mostrarBD(Connection con, Statement stmt, PrintWriter out, String baseDatos) throws SQLException, ClassNotFoundException {
         DatabaseMetaData metadatos;
-
-        String url = "jdbc:mysql://127.0.0.1:3306/" + base;
+        String url = "jdbc:mysql://127.0.0.1:3306/" + baseDatos;
         con = DriverManager.getConnection(url, "root", "");
         metadatos = con.getMetaData();
         String aux = null;
 
         ResultSet tablas = metadatos.getTables(null, null, null, null);
-        ArrayList aTablas = new ArrayList();
+        ArrayList arrayTablas = new ArrayList();
         while (tablas.next()) {
-            aTablas.add(tablas.getObject(3).toString());
+            arrayTablas.add(tablas.getObject(3).toString());
         }
         tablas.close();
 
         out.println("<body>");
-        out.println("<h3>Tablas de " + base + "</h3>");
-        for (int i = 0; i < aTablas.size(); i++) {
-            aux = aTablas.get(i).toString();
+        out.println("<h3>" + baseDatos + "</h3>");
+        for (int i = 0; i < arrayTablas.size(); i++) {
+            aux = arrayTablas.get(i).toString();
+            //Sacar informacion del nombre de la tabla
             out.println("<table style=\"text-align:center;\" border=\"5\">");
-            out.println("<th colspan='20' >" + aux + "</th>");
+            out.println("<td><b>" + aux + "</b></th>");
             out.println("<tr>");
-
+            //Sacar los nombres de las columnas
             ResultSet cols = metadatos.getColumns(null, null, aux, null);
             while (cols.next()) {
                 out.println("<td>" + cols.getString(4) + "</td>");
@@ -210,7 +189,7 @@ public class ServletConsultaDatos extends HttpServlet {
         }
         rs.beforeFirst();
 
-       //Bucle para sacar el nombre de las columnas que hay actualmente en la tabla
+        //Bucle para sacar el nombre de las columnas que hay actualmente en la tabla
         while (rs.next()) {
             String nombreColumna = rs.getString("COLUMN_NAME");
             out.println("<td><b>" + nombreColumna + "</b></td>");
@@ -218,8 +197,8 @@ public class ServletConsultaDatos extends HttpServlet {
         rs = stmt.executeQuery(sentenciaSQL);
 
         rs.beforeFirst();
-        
-        out.println("<tr>");        
+
+        out.println("<tr>");
         //Bucle para sacar los registros
         for (int i = 1; rs.next(); i++) {
             for (int j = 1; j <= contador; j++) {
