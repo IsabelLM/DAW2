@@ -51,7 +51,7 @@ public class ServletConsultaTablaEditar extends HttpServlet {
             ResultSet rs = stmt.executeQuery("SELECT * FROM facturamecanica");
             String id;
 
-            out.println("<table style=\"text-align:center;\" border=\"0\">");
+            out.println("<table style=\"text-align:center; border:1px solid\">");
             for (int x = 1; x <= rs.getMetaData().getColumnCount(); x++) {
                 out.println("<td><b>" + rs.getMetaData().getColumnName(x) + "</b></td>");
             }
@@ -59,7 +59,7 @@ public class ServletConsultaTablaEditar extends HttpServlet {
             while (rs.next()) {
                 id = rs.getString(1);
                 for (int x = 1; x <= rs.getMetaData().getColumnCount(); x++) {
-                    out.println("<td>" + rs.getString(x) + "</td>");
+                    out.println("<td style=\"border:hidden; \">" + rs.getString(x) + "</td>");
                 }
                 out.println("<td><form action='ServletConsultaTablaModificar' method='post'>");
                 out.println("<input type='hidden' value='" + id + "' name='id'>");

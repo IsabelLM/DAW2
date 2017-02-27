@@ -39,7 +39,6 @@ public class ServletConsultaExportar extends HttpServlet {
      */
     private static final int BYTES_DOWNLOAD = 1024;
     static DatabaseMetaData datos;
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
